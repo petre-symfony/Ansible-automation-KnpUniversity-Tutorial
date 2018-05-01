@@ -13,10 +13,14 @@
       become: true
       apt:
         upgrade: safe
-      
-    
+        
     - name: Install cowsay ~ it's probably important 
       apt:
         name: cowsay
-      become: true      
+      become: true 
+      
+    - name: Install Git VCS
+      become: true
+      apt:
+        name: git
   
