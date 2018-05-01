@@ -93,3 +93,6 @@
         repo: http://github.com/symfony/symfony-standard.git
         dest: "{{ symfony_root_dir }}"
         force: yes
+           
+    - name: Download Composer
+      script: scripts/install_composer.sh
