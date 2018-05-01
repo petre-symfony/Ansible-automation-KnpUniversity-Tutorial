@@ -23,4 +23,5 @@
       become: true
       apt:
         name: git
+        state: latest
   
