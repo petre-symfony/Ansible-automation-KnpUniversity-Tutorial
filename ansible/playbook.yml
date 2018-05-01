@@ -1,0 +1,87 @@
+---
+- hosts: vb
+
+  vars:
+    symfony_root_dir: /var/www/project
+      
+  tasks:
+    - ping: ~
+    
+    - name: Upgrade API Package Manager repositories cache
+      become: true
+      apt:
+        update_cache: yes
+        
+    - name: Upgrade installed packages
+      become: true
+      apt:
+        upgrade: safe
+        
+    - name: Install cowsay ~ it's probably important 
+      apt:
+        name: cowsay
+      become: true 
+      
+    - name: Install Git VCS
+      become: true
+      apt:
+        name: git
+        state: latest
+        
+    - name: Install Nginx web server
+      become: true
+      apt:
+        name: nginx
+        state: latest
+  
+    - name: Install MySQL DB Server
+      become: true
+      apt:
+        name: mysql-server
+        state: latest
+        
+    - name: Add PHP 7 PPA repository
+      become: true
+      apt_repository: 
+        repo: 'ppa:ondrej/php'
+      
+    - name: Install PHP packages
+      become: true
+      apt:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - php7.1-cli
+        - php7.1-curl
+        - php7.1-fpm
+        - php7.1-intl
+        - php7.1-mysql
+        
+    - name: Set date.timezone for CLI
+      become: true
+      lineinfile: 
+        dest: /etc/php/7.1/cli/php.ini
+        regexp: "date.timezone ="
+        line: "date.timezone = UTC"
+        
+    - name: Set date.timezone for FPM
+      become: true
+      lineinfile: 
+        dest: /etc/php/7.1/fpm/php.ini
+        regexp: "date.timezone ="
+        line: "date.timezone = UTC"
+        
+    - name: Create project directory and set its permissions
+      become: true
+      file:
+        path: "{{ symfony_root_dir }}"
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        recurse: yes
+        
+    - name: Checkout Git repository
+      git:
+        repo: http://github.com/symfony/symfony-standard.git
+        dest: "{{ symfony_root_dir }}"
+        force: yes
