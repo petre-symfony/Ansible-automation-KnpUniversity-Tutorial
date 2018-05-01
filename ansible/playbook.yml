@@ -68,6 +68,7 @@
         - php7.1-intl
         - php7.1-mysql
         - php7.1-xml
+      notify: Restart PHP-FPM
         
     - name: Set date.timezone for CLI
       become: true
@@ -80,8 +81,9 @@
       become: true
       lineinfile: 
         dest: /etc/php/7.1/fpm/php.ini
-        regexp: "date.timezone ="
+        regexp: "date.timezone = "
         line: "date.timezone = UTC"
+      notify: Restart PHP-FPM
         
     - name: Create project directory and set its permissions
       become: true
@@ -143,6 +145,12 @@
       become: true
       service:
         name: nginx
+        state: restarted
+        
+    - name: Restart PHP-FPM
+      become: true
+      service:
+        name: php7.1-fpm
         state: restarted
   
           
