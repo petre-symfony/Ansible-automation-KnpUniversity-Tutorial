@@ -16,7 +16,15 @@
       become: true
       apt:
         upgrade: safe
-        
+      
+    - name: Install low-level utilities
+      become: true
+      apt: 
+        name: "{{ item }}"
+      with_items:
+        - zip
+        - unzip
+      
     - name: Install cowsay ~ it's probably important 
       apt:
         name: cowsay
