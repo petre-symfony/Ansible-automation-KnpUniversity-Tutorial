@@ -96,3 +96,13 @@
            
     - name: Download Composer
       script: scripts/install_composer.sh
+      
+    - name: Move Composer globally
+      become: true
+      command: "mv composer.phar /usr/local/bin/composer"
+      
+    - name: Set Permissions on Composer
+      become: true
+      file:
+        path: /usr/local/bin/composer
+        mode: "a+x"
