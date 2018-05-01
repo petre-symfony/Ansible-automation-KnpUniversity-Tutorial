@@ -127,6 +127,7 @@
         src: "/etc/nginx/sites-available/{{ server_name }}.conf"
         dest: "/etc/nginx/sites-enabled/{{ server_name }}.conf"
         state: link
+      notify: Restart Nginx
         
     - name: Add enabled Nginx site /etc/hosts
       become: true
@@ -134,4 +135,12 @@
         dest: /etc/hosts
         regexp: "{{ server_name }}"
         line: "127.0.0.1 {{ server_name }}"
+        
+  handlers:
+    - name: Restart Nginx
+      become: true
+      service:
+        name: nginx
+        state: restarted
+  
           
