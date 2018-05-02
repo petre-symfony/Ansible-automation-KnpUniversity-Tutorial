@@ -169,13 +169,10 @@
     - name: Create DB if not exists
       command: '{{ symfony_console_path }} doctrine:database:create --if-not-exists'
       register: db_create_result
+      changed_when: "not {{ db_create_result.stdout|search('already exists. Skipped.') }}"
       tags:
         - deploy
         
-    - debug:
-        var: db_create_result
-      tags:
-        - deploy
       
     - name: Execute migrations
       command: '{{ symfony_console_path }} doctrine:migrations:migrate --no-interaction'
