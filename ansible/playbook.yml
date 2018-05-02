@@ -7,8 +7,23 @@
     symfony_web_dir: "{{ symfony_root_dir }}/web"
     symfony_var_dir: "{{ symfony_root_dir }}/var"
     symfony_console_path: "{{ symfony_root_dir }}/bin/console"
+    
+  vars_prompt:
+    - name: symfony_env
+      prompt: "Enter the environment for your Symfony app (prod|dev|test)"
+      default: prod
+      private: no
+      
+  environment:
+    SYMFONY_ENV: "{{ symfony_env|lower }}"
       
   tasks:
+    - debug:
+        var: ansible_env
+      
+    - debug:
+        var: symfony_env
+      
     - ping: ~
     
     - name: Upgrade API Package Manager repositories cache
@@ -189,6 +204,8 @@
         
     - name: Clear cache
       command: '{{ symfony_console_path }} cache:clear --env=prod'
+      tags:
+        - deploy
       
   handlers:
     - name: Restart Nginx
