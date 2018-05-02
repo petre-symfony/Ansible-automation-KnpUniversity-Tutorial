@@ -25,11 +25,6 @@
         - always
       
   tasks:
-    - debug:
-        var: ansible_env
-      
-    - debug:
-        var: symfony_env
       
     - ping: ~
     
@@ -150,7 +145,7 @@
     - name: Install Composer's dependencies
       composer:
         working_dir: "{{ symfony_root_dir }}"
-        no-dev: no
+        no-dev: "{{ 'yes' if ('prod' == symfony_env) else 'no' }}"
       tags:
         - deploy
         
