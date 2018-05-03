@@ -152,7 +152,16 @@
       when: not composer_stat.stat.exists
       tags:
         - deploy
+    
+    - name: Make sure Composer is at its latest version
+      composer: 
+        working_dir: "{{ symfony_root_dir }}"
+        command: self-update
+      when: composer_stat.stat.exists
+      tags:
+        - deploy
         
+    
     - name: Install Composer's dependencies
       composer:
         working_dir: "{{ symfony_root_dir }}"
