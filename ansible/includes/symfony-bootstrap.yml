@@ -19,6 +19,14 @@
     - permissions
     - deploy
 
+- name: Set Loggly token in parameters.yml
+  lineinfile:
+    dest: "{{ symfony_root_dir }}/app/config/parameters.yml"
+    regexp: "^    loggly_token:"
+    line: "    loggly_token: {{ loggly_token }}"
+  tags:
+    - deploy
+    
 - name: Set Symfony secret in parameters.yml
   lineinfile:
     dest: "{{ symfony_root_dir }}/app/config/parameters.yml"
