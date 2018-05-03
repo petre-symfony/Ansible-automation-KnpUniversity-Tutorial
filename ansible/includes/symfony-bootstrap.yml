@@ -61,7 +61,7 @@
 
 - name: Clear cache
   command: '{{ symfony_console_path }} cache:clear --env={{ symfony_env }}'
-  when: code_changed
+  #when: code_changed
   changed_when: false
   tags:
     - deploy
