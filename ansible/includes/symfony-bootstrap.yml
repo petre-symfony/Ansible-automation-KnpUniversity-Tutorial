@@ -4,7 +4,7 @@
   composer:
     working_dir: "{{ symfony_root_dir }}"
     no-dev: "{{ 'yes' if ('prod' == symfony_env) else 'no' }}"
-  when: code_changed
+  #when: code_changed
   tags:
     - deploy
     
