@@ -36,6 +36,8 @@
       
   roles:
     - nginx
+    - role: DavidWittman.redis
+      become: true
     
   tasks:
       
