@@ -120,6 +120,13 @@
         repo: https://github.com/knpuniversity/ansible.git
         dest: "{{ symfony_root_dir }}"
         force: yes
+      register: repo_code
+      tags:
+        - deploy
+        
+    - name: Register code_changed variable
+      set_fact:
+        code_changed: repo_code.changed
       tags:
         - deploy
         
@@ -167,6 +174,7 @@
       composer:
         working_dir: "{{ symfony_root_dir }}"
         no-dev: "{{ 'yes' if ('prod' == symfony_env) else 'no' }}"
+      when: code_changed
       tags:
         - deploy
         
@@ -215,6 +223,7 @@
     - name: Execute migrations
       command: '{{ symfony_console_path }} doctrine:migrations:migrate --no-interaction'
       register: db_migrations_result
+      when: code_changed
       changed_when: "not db_migrations_result.stdout|search('No migrations to execute')"
       tags:
         - deploy
@@ -228,6 +237,7 @@
         
     - name: Clear cache
       command: '{{ symfony_console_path }} cache:clear --env={{ symfony_env }}'
+      when: code_changed
       changed_when: false
       tags:
         - deploy
