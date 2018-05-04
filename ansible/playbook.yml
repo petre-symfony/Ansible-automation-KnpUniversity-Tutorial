@@ -1,5 +1,5 @@
 ---
-- hosts: vb
+- hosts: webserver
 
   vars_files:
     - ./vars/vault.yml
@@ -160,6 +160,7 @@
         - deploy
     
     - name: Make sure composer is at its latest version
+      become: true
       composer:
         working_dir: "{{ symfony_root_dir }}"
         command: self-update
